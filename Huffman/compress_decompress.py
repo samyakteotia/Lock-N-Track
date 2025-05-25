@@ -1,14 +1,9 @@
 from collections import deque
-from Huffman.huffman import build_frequency_table
-from Huffman.huffman import build_huffman_tree
-from Huffman.huffman import build_codes
-from Huffman.huffman import serialize_tree
-from Huffman.huffman import deserialize_tree
-
-
-
+from Huffman.huffman import build_frequency_table, build_huffman_tree, build_codes
+from Huffman.huffman import serialize_tree, deserialize_tree, HuffmanNode
 
 def compress_data_with_huffman(data: bytes) -> bytes:
+    """Compress data using Huffman coding without modifying content"""
     if not data:
         return b""
     
@@ -37,21 +32,17 @@ def compress_data_with_huffman(data: bytes) -> bytes:
         byte = bit_string[i:i+8]
         encoded_bytes.append(int(byte, 2))
     
-    # Combine tree info, padding info, and encoded data
+    # Combine metadata and encoded data
     compressed_data = bytearray()
-    # First byte is padding length
-    compressed_data.append(padding_length)
-    # Next comes the tree (as string bytes)
-    compressed_data.extend(tree_str.encode('utf-8'))
-    # Separator between tree and data
-    compressed_data.append(0)
-    # Finally the encoded data
-    compressed_data.extend(encoded_bytes)
+    compressed_data.append(padding_length)  # First byte is padding length
+    compressed_data.extend(tree_str.encode('utf-8'))  # Then tree
+    compressed_data.append(0)  # Separator
+    compressed_data.extend(encoded_bytes)  # Finally the data
     
     return bytes(compressed_data)
 
-
 def decompress_data_with_huffman(compressed_data: bytes) -> bytes:
+    """Decompress Huffman-compressed data"""
     if not compressed_data:
         return b""
     
@@ -96,25 +87,22 @@ def decompress_data_with_huffman(compressed_data: bytes) -> bytes:
     
     return bytes(decoded_data)
 
-def compress_file(file_path: str) -> None:
-    with open(file_path, "rb") as file:
-        data = file.read()
+def compress_file(input_path: str, output_path: str) -> None:
+    """Compress file without modifying content"""
+    with open(input_path, 'rb') as f:
+        original_data = f.read()
     
-    compressed_data = compress_data_with_huffman(data)
+    compressed_data = compress_data_with_huffman(original_data)
     
-    with open(file_path, "wb") as file:
-        file.write(compressed_data)
-    print(f"File '{file_path}' compressed successfully.")
+    with open(output_path, 'wb') as f:
+        f.write(compressed_data)
 
-
-def decompress_file(file_path: str) -> None:
-    with open(file_path, "rb") as file:
-        compressed_data = file.read()
+def decompress_file(input_path: str, output_path: str) -> None:
+    """Decompress file while preserving original content"""
+    with open(input_path, 'rb') as f:
+        compressed_data = f.read()
     
-    try:
-        decompressed_data = decompress_data_with_huffman(compressed_data)
-        with open(file_path, "wb") as file:
-            file.write(decompressed_data)
-        print(f"File '{file_path}' decompressed successfully.")
-    except (ValueError, IndexError, AttributeError) as e:
-        print(f"File is not a valid compressed file or already decompressed: {e}")
+    decompressed_data = decompress_data_with_huffman(compressed_data)
+    
+    with open(output_path, 'wb') as f:
+        f.write(decompressed_data)

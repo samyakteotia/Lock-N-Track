@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="result-container">
+    <h2>Operation Result</h2>
+    <div class="result-box {% if 'Error' in message %}error{% else %}success{% endif %}">
+        {{ message }}
+    </div>
+    
+    {% if filename %}
+    <div class="file-info">
+        <p>File: {{ filename }}</p>
+        <p>Operation: {{ operation }}</p>
+        
+        {% if operation in ['encrypt', 'decrypt', 'compress', 'decompress'] %}
+            {% set processed_filename = operation + 'ed_' + filename %}
+            {% if operation == 'compress' %}
+                {% set processed_filename = processed_filename + '.bin' %}
+            {% endif %}
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <a href="{{ url_for('index') }}" class="back-btn">Back to Home</a>
+</div>
+{% endblock %}

@@ -1,3 +1,4 @@
+
 from collections import defaultdict,deque
 import heapq
 
@@ -74,5 +75,3 @@ def deserialize_tree(data: deque) -> HuffmanNode:
         left = deserialize_tree(data)
         right = deserialize_tree(data)
         return HuffmanNode(left=left, right=right)
-
-

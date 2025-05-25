@@ -1,0 +1,29 @@
+ function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    // Show/hide password and hash fields based on operation
+    operationRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            passwordContainer.style.display = 'none';
+            hashContainer.style.display = 'none';
+            
+            if (this.value === 'encrypt' || this.value === 'decrypt') {
+                passwordContainer.style.display = 'block';
+            } else if (this.value === 'revert') {
+                hashContainer.style.display = 'block';
+            }
+        });
+    });
+    
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        const selectedOperation = document.querySelector('input[name="operation"]:checked');
+        
+        if (!selectedOperation) {
+            alert('Please select an operation');
+            e.preventDefault();

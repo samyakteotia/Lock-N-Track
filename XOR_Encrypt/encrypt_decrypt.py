@@ -1,4 +1,5 @@
 import os
+
 def xor_encrypt_decrypt_data(input_data: bytes, key: bytearray) -> bytes:
     encrypted_or_decrypted = bytearray()
     for index in range(len(input_data)):
@@ -8,38 +9,43 @@ def xor_encrypt_decrypt_data(input_data: bytes, key: bytearray) -> bytes:
         encrypted_or_decrypted.append(result_byte)
     return bytes(encrypted_or_decrypted)
 
-def encrypt_file_with_password(file_path: str, password: str) -> None:
-    with open(file_path, "rb") as file:
-        file_content = file.read()
-    key = create_key_from_password(password, len(file_content))
-    encrypted_content = xor_encrypt_decrypt_data(file_content, key)
-    with open(file_path, "wb") as file:
-        file.write(encrypted_content)
-    print(f"✅ File '{file_path}' encrypted successfully.")
-
-
-def decrypt_file_with_password_attempts(file_path: str, max_attempts: int = 3) -> None:
-    for attempt in range(1, max_attempts + 1):
-        entered_password = input(f"🔐 Attempt {attempt}/{max_attempts} - Enter password to decrypt: ")
-        with open(file_path, "rb") as file:
-            encrypted_data = file.read()
-        key = create_key_from_password(entered_password, len(encrypted_data))
-        decrypted_data = xor_encrypt_decrypt_data(encrypted_data, key)
-        try:
-            decrypted_data.decode('utf-8')
-            with open(file_path, "wb") as file:
-                file.write(decrypted_data)
-            print(f"✅ File '{file_path}' decrypted successfully.")
-            return
-        except UnicodeDecodeError:
-            print("❌ Incorrect password.")
-    print("🚫 Too many failed attempts. Deleting file for security.")
-    os.remove(file_path)
-
 def create_key_from_password(password: str, required_length: int) -> bytearray:
-    base_value = sum(ord(char) for char in password)
+    """Create encryption key from password (fixed to handle both str and bytes)"""
+    if isinstance(password, str):
+        password = password.encode('utf-8')
+    base_value = sum(byte for byte in password)
     key_stream = bytearray()
     for i in range(required_length):
         key_byte = (base_value + i * 17) % 256
         key_stream.append(key_byte)
     return key_stream
+
+def encrypt_file_with_password(file_path: str, password: str) -> None:
+    """Encrypt file with password (fixed to handle binary data properly)"""
+    with open(file_path, 'rb') as file:
+        file_content = file.read()
+    key = create_key_from_password(password, len(file_content))
+    encrypted_content = xor_encrypt_decrypt_data(file_content, key)
+    with open(file_path, 'wb') as file:
+        file.write(encrypted_content)
+
+def decrypt_file_with_password_attempts(file_path: str, password: str, max_attempts: int = 3) -> None:
+    """Decrypt file with password attempts (fixed error handling)"""
+    for attempt in range(1, max_attempts + 1):
+        try:
+            with open(file_path, 'rb') as file:
+                encrypted_data = file.read()
+            key = create_key_from_password(password, len(encrypted_data))
+            decrypted_data = xor_encrypt_decrypt_data(encrypted_data, key)
+            
+            # Test if decryption was successful
+            if len(decrypted_data) == 0 or not all(32 <= byte <= 126 or byte in {9,10,13} for byte in decrypted_data[:100]):
+                raise ValueError("Invalid decryption result")
+                
+            with open(file_path, 'wb') as file:
+                file.write(decrypted_data)
+            return
+        except Exception as e:
+            if attempt == max_attempts:
+                os.remove(file_path)
+                raise ValueError(f"Failed after {max_attempts} attempts")

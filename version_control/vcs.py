@@ -82,4 +82,3 @@ def revert_to_snapshot(hash_digest):
         print(f"Removed {file_path}")
     # Print a confirmation of reverting to the specified snapshot
     print(f"Reverted to snapshot {hash_digest}")
-
