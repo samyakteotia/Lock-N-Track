@@ -1,4 +1,4 @@
-# 🔐 Lock and Track
+# 🔐 SecureZip
 
 **Lock and Track** is a secure and lightweight file management system that provides:
 
