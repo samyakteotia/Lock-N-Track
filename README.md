@@ -9,6 +9,12 @@
 It ensures your files are protected, compressed for storage efficiency, and traceable through manual versioning.
 
 ---
+## GUI
+
+<img src="GUI.png" alt="App Screenshot" width="800"/>
+
+## Please find the demo video at the bottom :)
+---
 
 ## 🚀 Features
 
@@ -26,4 +32,7 @@ It ensures your files are protected, compressed for storage efficiency, and trac
 - Each snapshot is mapped to a **short numeric index** and a **hash ID**.
 - Supports **manual reverting** to previous versions using the index.
 
+## Version Control Demo
+
+🎥 [Click the image above to watch the demo](Version_Control_Demo.mp4)
 
