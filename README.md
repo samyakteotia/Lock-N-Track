@@ -13,7 +13,7 @@ It ensures your files are protected, compressed for storage efficiency, and trac
 
 <img src="GUI.png" alt="App Screenshot" width="800"/>
 
-## Please find the demo video at the bottom :)
+## Please find the demo video at the bottom or in the repository and click on view raw to download :)
 ---
 
 ## 🚀 Features
@@ -28,11 +28,12 @@ It ensures your files are protected, compressed for storage efficiency, and trac
 - Decompression restores the file to its original content after decryption.
 
 ### 🕒 Snapshot-based Version Control
-- Create **snapshots** of the current encrypted+compressed file.
-- Each snapshot is mapped to a **short numeric index** and a **hash ID**.
+- Create **snapshots** of the current file (even encrypted+compressed).
+- Each snapshot is mapped to a **short numeric index (starting from 100000)** and a **hash ID**.
+- After every snapshot, index increments by 1. eg, **(100000,100001,100002)**.
 - Supports **manual reverting** to previous versions using the index.
 
 ## Version Control Demo
-
+click on view raw to download the video
 🎥 [Click the image above to watch the demo](Version_Control_Demo.mp4)
 
