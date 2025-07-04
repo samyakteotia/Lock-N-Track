@@ -1,6 +1,6 @@
 # 🔐 SecureZip
 
-**Lock and Track** is a secure and lightweight file management system that provides:
+**SecureZip** is a secure and lightweight file management system that provides:
 
 - 🔐 Password-based XOR Encryption & Decryption ( Auto-deletion of files after 3 failed password attempts ) 
 - 📦 Huffman Compression & Decompression  
